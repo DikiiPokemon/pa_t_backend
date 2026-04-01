@@ -49,7 +49,7 @@ class Products {
     async getMods(req, res, next){
        
         try {
-            const {prod_id} = req.body
+            const {prod_id} = req.query
             const mods = await axios.get(
                 "https://api.moysklad.ru/api/remap/1.2/entity/variant",
                 {
@@ -67,6 +67,28 @@ class Products {
             )
 
             res.json(mods.data.rows);
+        } catch (error) {
+            return next(ApiError.badRequest(error.message))
+        }
+    }
+
+    async getStock(req, res, next){
+       
+        try {
+            const stocks = await axios.get(
+                "https://api.moysklad.ru/api/remap/1.2/report/stock/all/current",
+                {
+                    auth: {
+                        username: process.env.user,
+                        password: process.env.password,
+                    },
+                    headers: {
+                    "Accept-Encoding": "gzip", // ускоряет ответ
+                    },
+                }
+            )
+
+            res.json(stocks.data);
         } catch (error) {
             return next(ApiError.badRequest(error.message))
         }

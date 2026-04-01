@@ -4,5 +4,6 @@ const Products = require("../controllers/products")
 
 router.get("/", Products.getAll)
 router.get("/get_mods", Products.getMods)
+router.get("/get_stock", Products.getStock)
 
 module.exports = router;
