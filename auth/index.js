@@ -1,15 +1,15 @@
 const { google } = require("googleapis");
 
 async function Auth(){
-    // const auth = new google.auth.GoogleAuth({
-    //     keyFile: "pa-t-483815-bc77f219b849.json", // <-- точное имя файла
-    //     scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
-    // });
+    const auth = new google.auth.GoogleAuth({
+        keyFile: "./pa-t-483815-d2c4dad27138.json", // <-- точное имя файла
+        scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
+    });
 
-    // const client = await auth.getClient();
+    const client = await auth.getClient();
 
 
-    // return client;
+    return client;
 }
 
 let sheets;
