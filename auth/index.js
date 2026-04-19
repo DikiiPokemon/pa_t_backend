@@ -2,7 +2,7 @@ const { google } = require("googleapis");
 
 async function Auth(){
     const auth = new google.auth.GoogleAuth({
-        keyFile: "./pa-t-483815-d2c4dad27138.json", // <-- точное имя файла
+        keyFile: "./pa-t-483815-19cbb749254e.json", // <-- точное имя файла
         scopes: ["https://www.googleapis.com/auth/spreadsheets.readonly"],
     });
 
