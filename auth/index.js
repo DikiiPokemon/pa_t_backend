@@ -1,5 +1,7 @@
 const { google } = require("googleapis");
 
+//Регистарация для гугл excel оставляю до лучших времен, подготовлено уже под аккаунт, который завел Садиков Андрей
+
 async function Auth(){
     const auth = new google.auth.GoogleAuth({
         keyFile: "./pa-t-483815-19cbb749254e.json", // <-- точное имя файла

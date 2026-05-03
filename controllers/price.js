@@ -2,6 +2,28 @@ const { default: axios } = require("axios");
 const ApiError = require("../Error/ApiError");
 const { getSheets } = require("../auth");
 require("dotenv").config()
+const XLSX = require('xlsx');
+
+
+//Здесь забираем весь столбец по имени заголовка
+function getColumn(filePath, sheetName, columnName) {
+  const workbook = XLSX.readFile(filePath);
+
+  const sheet = workbook.Sheets[sheetName];
+  const data = XLSX.utils.sheet_to_json(sheet);
+
+  return data.map(row => row[columnName]);
+}
+
+//Здесь забираем значение определенной ячейки
+function getCell(filePath, sheetName, cellAddress) {
+  const workbook = XLSX.readFile(filePath);
+  const sheet = workbook.Sheets[sheetName];
+
+  const cell = sheet[cellAddress];
+
+  return cell ? cell.v : undefined;
+}
 
 
 
@@ -10,42 +32,32 @@ class Price {
     async getPrice(req, res, next){
         try {
             
-            const sheets = await getSheets();
-            const spreadsheetId = process.env.SPREADSHEET_ID;
-            const price = await sheets.spreadsheets.values.get({
-                spreadsheetId,
-                range: `Mods!F:F`,
-                fields: "values",
-            });
-            
-            let arr = price.data.values
-            arr.shift()
-            const result = arr.flat()
+            const result = getColumn('./prices_excel/LPS.xlsx', "Mods", "Цена с НДС (руб)")
             res.json(result)
         } catch (error) {
             console.error("Ошибка чтения таблицы:", error.price?.data || error.message);
+            return next(ApiError.badRequest(error.message))
         }
     }
 
     async getPriceBDT_BFS(req, res, next){
         try {
-            const sheets = await getSheets();
-            const spreadsheetId = process.env.SPREADSHEET_ID;
-            const price = await sheets.spreadsheets.values.get({
-                spreadsheetId,
-                range: `Датчик LPS!Z18`,
-                fields: "values",
-            });
-            
-            let arr = price.data.values
-            const result = arr.flat()
+            const result = getCell('./prices_excel/LPS.xlsx', "Датчик LPS", "Z18")
             res.json(result)
         } catch (error) {
             console.error("Ошибка чтения таблицы:", error.price?.data || error.message);
+            return next(ApiError.badRequest(error.message))
         }
     }
-    async changeModel(req, res, next){
-      
+    async getPricefs(req, res, next){
+        try {
+
+            const result = getColumn('./prices_excel/FS.xlsx', "Mods", "Цена с НДС (руб)")
+            res.json(result)
+        } catch (error) {
+            console.error("Ошибка чтения таблицы:", error.price?.data || error.message);
+            return next(ApiError.badRequest(error.message))
+        }
     }
     async changeType(req, res, next){
       
