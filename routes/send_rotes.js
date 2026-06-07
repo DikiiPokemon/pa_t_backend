@@ -6,7 +6,7 @@ const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     host: process.env.smtp_Host,
     port: Number(process.env.smtp_Port),
-    secure: process.env.smtp_Secure === 'true', 
+    secure: true, 
     auth: {
       user: process.env.smtp_Mail,
       pass: process.env.smtp_Pass,
@@ -62,12 +62,12 @@ router.post("/", (req, res, next) => {
 
   transporter.sendMail({
     from: process.env.smtp_Mail, // sender address
-    to: process.env.smtp_Mail, // list of receivers
+    to: process.env.smtp_Mail_to, // list of receivers
     subject: "Обратная связь с сайта ПА-Т от " + req.body.name + ", Почта для обратной связи: " + req.body.mail + ", Тема сообщения: " + req.body.theme, // Subject line
     text: req.body.text, // plain text body
     }, (error, info) => {
     if (error) {
-      return res.status(404).json({ message: 'Произошла ошибка во время отправки письма'});
+      return res.status(404).json({error, message: 'Произошла ошибка во время отправки письма'});
     }else{
       return res.status(200).json({ message: 'Письмо успешно отправлено'});
     }
@@ -99,7 +99,7 @@ router.post("/cart", (req, res) => {
 
   transporter.sendMail({
     from: process.env.smtp_Mail, // sender address
-    to: process.env.smtp_Mail, // list of receivers
+    to: process.env.smtp_Mail_to, // list of receivers
     subject: "Заказ на товары с сайта ПА-Т от " + req.body.name + ", телефон для обратной связи:" + req.body.phone + ", Почта для обратной связи: " + req.body.mail, // Subject line
     text: req.body.text,
     html
