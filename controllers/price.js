@@ -42,7 +42,7 @@ class Price {
 
     async getPriceBDT_BFS(req, res, next){
         try {
-            const result = getCell('./prices_excel/LPS.xlsx', "Датчик LPS", "Z18")
+            const result = getCell('./prices_excel/LPS.xlsx', "Датчик LPS", "AD18")
             res.json(result)
         } catch (error) {
             console.error("Ошибка чтения таблицы:", error.price?.data || error.message);
